@@ -53,18 +53,21 @@ class NewImage extends Component {
       let src = URL.createObjectURL(file.file);
 
       return (
-        <div key={index} className="col">
+        <div key={index} className="col text-center">
           <div className="card shadow-sm">
-            <img className="card-img-top" src={src} height="100%" />
+            <img className="card-img-top img-responsive" src={src} />
 
             <div className="card-body">
-              <p className="card-text">
-                <input
-                  type="text"
-                  onChange={(e) => this.updateTitle(index, e.target.value)}
-                  defaultValue={file.title}
-                />
-              </p>
+              <div className="card-title">
+                <div class="form-group">
+                  <input
+                    className="form-control"
+                    type="text"
+                    onChange={(e) => this.updateTitle(index, e.target.value)}
+                    defaultValue={file.title}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -77,38 +80,26 @@ class NewImage extends Component {
     let disableUpload = files.length > 0 ? false : true;
 
     return (
-      <div className="cover-container d-flex p-3 mx-auto flex-column">
-        <main className="px-3">
-          <div>
-            <input
-              class="form-control form-control-lg"
-              type="file"
-              name="file"
-              accept=".jpg, .jpeg, .png"
-              onChange={this.handleImageOnchange}
-              multiple
-            />
-          </div>
-
-          <button
-            className="btn btn-primary"
-            disabled={disableUpload}
-            onClick={this.uploadImage}
-          >
-            Submit
-          </button>
-        </main>
-
-        <main>
-          <div className="album py-5">
-            <div className="container">
-              <div className="row row-cols-1 row-cols-sm-2 row-cols-md-6">
-                <this.ShowForms />
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
+      <main className="container">
+        <input
+          className="form-control col-3"
+          type="file"
+          name="file"
+          accept=".jpg, .jpeg, .png"
+          onChange={this.handleImageOnchange}
+          multiple
+        />
+        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+          <this.ShowForms />
+        </div>
+        <a
+          className="btn btn-primary"
+          disabled={disableUpload}
+          onClick={this.uploadImage}
+        >
+          Submit
+        </a>
+      </main>
     );
   }
 }

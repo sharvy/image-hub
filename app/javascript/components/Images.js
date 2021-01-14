@@ -15,7 +15,7 @@ class Images extends Component {
             />
 
             <div className="card-body">
-              <p className="card-text">
+              <p className="card-text text-dark">
                 {image.title}
               </p>
             </div>
