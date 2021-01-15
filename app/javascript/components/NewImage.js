@@ -53,13 +53,13 @@ class NewImage extends Component {
       let src = URL.createObjectURL(file.file);
 
       return (
-        <div key={index} className="col text-center">
-          <div className="card shadow-sm">
+        <div key={index} className="col text-center mb-2">
+          <div className="card shadow-sm h-100">
             <img className="card-img-top img-responsive" src={src} />
 
             <div className="card-body">
               <div className="card-title">
-                <div class="form-group">
+                <div className="form-group">
                   <input
                     className="form-control"
                     type="text"
@@ -81,24 +81,34 @@ class NewImage extends Component {
 
     return (
       <main className="container">
-        <input
-          className="form-control col-3"
-          type="file"
-          name="file"
-          accept=".jpg, .jpeg, .png"
-          onChange={this.handleImageOnchange}
-          multiple
-        />
+        <div className="row mb-4 mt-4">
+          <div className="col-sm"></div>
+          <div className="col-sm">
+            <div className="form-row align-items-center">
+              <input
+                className="form-control-file"
+                type="file"
+                name="file"
+                accept=".jpg, .jpeg, .png"
+                onChange={this.handleImageOnchange}
+                multiple
+              />
+            </div>
+          </div>
+          <div className="col-sm text-left">
+            <a
+              className="btn btn-primary"
+              disabled={disableUpload}
+              onClick={this.uploadImage}
+            >
+              Submit
+            </a>
+          </div>
+        </div>
+
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3">
           <this.ShowForms />
         </div>
-        <a
-          className="btn btn-primary"
-          disabled={disableUpload}
-          onClick={this.uploadImage}
-        >
-          Submit
-        </a>
       </main>
     );
   }
