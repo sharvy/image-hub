@@ -36,7 +36,7 @@ class NewImage extends Component {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((response) => console.log(response));
+      .then((response) => window.location = "/");
   };
 
   updateTitle = (index, title) => {

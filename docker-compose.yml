@@ -1,0 +1,28 @@
+version: '3.0'
+services:
+  db:
+    image: postgres
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  webpacker:
+    build: .
+    command: ./bin/webpack-dev-server --inline true
+    volumes:
+      - '.:/app'
+    ports:
+      - '3035:3035'
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - webpacker
+volumes:
+  pgdata:
+    external: true
