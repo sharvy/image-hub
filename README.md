@@ -11,6 +11,7 @@ cd image-hub
 
 ## Run
 ```
+docker build -t image-hub .
 docker volume create --name=pgdata
 docker-compose up
 open http://localhost:3000
