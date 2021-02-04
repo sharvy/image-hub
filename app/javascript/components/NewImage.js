@@ -1,28 +1,27 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import InputForm from "./InputForm";
 import axios from "axios";
 
-class NewImage extends Component {
-  state = {
-    files: [],
+const NewImage = () => {
+  const [files, setFiles] = useState([]);
+  let disableUpload = files.length > 0 ? false : true;
+
+  const csrfToken = () => {
+    return document.querySelector('meta[name="csrf-token"]').content;
   };
 
-  csrfToken() {
-    return document.querySelector('meta[name="csrf-token"]').content;
-  }
-
-  handleImageOnchange = (e) => {
+  const handleImageOnchange = (e) => {
     let files = Array.from(e.target.files);
 
     files = files.map((file) => {
       return { file: file, title: file.name };
     });
 
-    this.setState({ files });
+    setFiles(files);
   };
 
-  uploadImage = () => {
+  const onSubmit = () => {
     let formData = new FormData();
-    let { files } = this.state;
 
     files.forEach((file, index) => {
       formData.append(`images[${index}][title]`, file.title);
@@ -32,24 +31,22 @@ class NewImage extends Component {
     axios
       .post("/images", formData, {
         headers: {
-          "X-CSRF-Token": this.csrfToken(),
+          "X-CSRF-Token": csrfToken(),
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((response) => window.location = "/");
+      .then((response) => (window.location = "/"));
   };
 
-  updateTitle = (index, title) => {
-    let { files } = this.state;
+  const updateTitle = (index, title) => {
     files[index].title = title;
-
-    this.setState({ files });
+    console.log(index, title);
+    console.log(files);
+    setFiles(files);
   };
 
-  ShowForms = () => {
-    let { files } = this.state;
-
-    return files.map((file, index) => {
+  const ShowForms = () => {
+    const content = files.map((file, index) => {
       let src = URL.createObjectURL(file.file);
 
       return (
@@ -63,7 +60,7 @@ class NewImage extends Component {
                   <input
                     className="form-control"
                     type="text"
-                    onChange={(e) => this.updateTitle(index, e.target.value)}
+                    onChange={(e) => updateTitle(index, e.target.value)}
                     defaultValue={file.title}
                   />
                 </div>
@@ -73,45 +70,24 @@ class NewImage extends Component {
         </div>
       );
     });
-  };
-
-  render() {
-    let { files } = this.state;
-    let disableUpload = files.length > 0 ? false : true;
 
     return (
-      <main className="container">
-        <div className="row mb-4 mt-4">
-          <div className="col-sm"></div>
-          <div className="col-sm">
-            <div className="form-row align-items-center">
-              <input
-                className="form-control-file"
-                type="file"
-                name="file"
-                accept=".jpg, .jpeg, .png"
-                onChange={this.handleImageOnchange}
-                multiple
-              />
-            </div>
-          </div>
-          <div className="col-sm text-left">
-            <a
-              className="btn btn-primary"
-              disabled={disableUpload}
-              onClick={this.uploadImage}
-            >
-              Submit
-            </a>
-          </div>
-        </div>
-
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3">
-          <this.ShowForms />
-        </div>
-      </main>
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3">
+        {content}
+      </div>
     );
-  }
-}
+  };
+
+  return (
+    <main className="container">
+      <InputForm
+        onChange={handleImageOnchange}
+        onSubmit={onSubmit}
+        disableUpload={disableUpload}
+      />
+      <ShowForms />
+    </main>
+  );
+};
 
 export default NewImage;
